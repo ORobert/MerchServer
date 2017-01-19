@@ -3,12 +3,12 @@
  */
 package Server;
 
-import Persistence.ShopRepository;
+import Persistence.Repository;
 
 public class StartServer {
     public static void main(String[] args) {
         Server server = new Server(55555);
-        server.setRepository(new ShopRepository());
+        server.setRepository(new Repository());
         server.start();
     }
 }

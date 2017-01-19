@@ -1,7 +1,6 @@
 package Server;
 
 import Persistence.IRepository;
-import Persistence.ShopRepository;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -24,7 +23,7 @@ public class Server {
 
     public void setRepository(IRepository repository){
         this.repository=repository;
-        ((ShopRepository) this.repository).seed("products.xml");
+        //((ShopRepository) this.repository).seed("products.xml");
     }
 
     public void start(){
@@ -35,8 +34,8 @@ public class Server {
             e.printStackTrace();
         }
         while (true){
-            Socket client=null;
-            System.out.println("Waiting for clinets");
+            Socket client;
+            System.out.println("Waiting for clients!");
             try {
                 client = server.accept();
                 (new ClientThread(client,repository)).run();
@@ -46,7 +45,6 @@ public class Server {
 
         }
     }
-
 
     public void stop(){
         try {

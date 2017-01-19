@@ -1,6 +1,7 @@
 package Persistence;
 
-import Models.Products;
+import Models.Order;
+import Models.Product;
 
 import java.util.List;
 
@@ -8,7 +9,11 @@ import java.util.List;
  * Created by orobe on 29/12/2016.
  */
 public interface IRepository {
-    List<Products> getAll();
-    List<Products> getByName(String name);
-    Products getById(int id);
+    List<Product> getAllProducts();
+    List<Order> getAllOrders();
+    List<Product> getByName(String name);
+    Product getById(int id);
+    void orderProducts(Order order);
+    void takeOrders(List<Order> orders);
+    void deliverOrder(Order order);
 }

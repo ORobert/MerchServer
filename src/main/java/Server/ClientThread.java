@@ -1,11 +1,10 @@
 package Server;
 
-import Models.Products;
+import Models.Order;
+import Models.OrderState;
+import Models.Product;
 import Persistence.IRepository;
-import Protocol.GetAllRequest;
-import Protocol.GetAllResponse;
-import Protocol.Request;
-import Protocol.Response;
+import Protocol.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,14 +25,29 @@ public class ClientThread extends Thread {
         this.repository=repository;
     }
 
-    public Object handleRequest(Object request){
+    public Object handleRequest(Request request){
         System.out.println("Chacking request");
         if (request instanceof GetAllRequest){
-            List<Products> products = repository.getAll();
+            List<Product> products = repository.getAllProducts();
             Response response = new GetAllResponse();
             ((GetAllResponse) response).setProductsList(products);
             return response;
         }
+        if(request instanceof OrderProductsRequest){
+            repository.orderProducts(((OrderProductsRequest) request).getOrder());
+            return new OkResponse();
+        }
+        if(request instanceof TakeOrdersRequest){
+			repository.takeOrders(((TakeOrdersRequest) request).getOrders());
+			return new OkResponse();
+		}
+		if(request instanceof DeliverOrderRequest){
+        	DeliverOrderRequest req=((DeliverOrderRequest) request);
+        	Order order=req.getOrder();
+        	order.setState(OrderState.Delivered);
+			repository.deliverOrder(order);
+			return new OkResponse();
+		}
         return null;
     }
 
@@ -52,7 +66,7 @@ public class ClientThread extends Thread {
                 Object request = recive.readObject();
                 Object response = handleRequest((Request)request);
                 System.out.println("Sending response");
-                send.writeObject((Response)response);
+                send.writeObject(response);
                 send.flush();
             } catch (IOException e) {
                 e.printStackTrace();
