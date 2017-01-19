@@ -2,6 +2,7 @@ package Persistence;
 
 import Models.Order;
 import Models.Product;
+import Models.User;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface IRepository {
     void orderProducts(Order order);
     void takeOrders(List<Order> orders);
     void deliverOrder(Order order);
+    User login(String username, String password);
 }

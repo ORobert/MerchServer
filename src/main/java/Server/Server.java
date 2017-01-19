@@ -1,5 +1,6 @@
 package Server;
 
+import Models.User;
 import Persistence.IRepository;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class Server {
 
     public void setRepository(IRepository repository){
         this.repository=repository;
+        User user =  repository.login("robert","robert");
+        System.out.println(user);
         //((ShopRepository) this.repository).seed("products.xml");
     }
 

@@ -5,11 +5,12 @@
 
     <persistence-unit name="merch" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>Models.Stock_Products</class>
-        <class>Models.Shop_Products</class>
+        <class>Models.Product</class>
+        <class>Models.Order</class>
+        <class>Models.User</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/merch" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/merchdb" />
             <property name="javax.persistence.jdbc.user" value="root" />
             <property name="javax.persistence.jdbc.password" value="unimetal" />
         </properties>

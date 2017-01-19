@@ -15,6 +15,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column
+	@Enumerated(EnumType.STRING)
 	private OrderState state;
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -2,6 +2,7 @@ package Persistence;
 
 import Models.Order;
 import Models.Product;
+import Models.User;
 
 import javax.persistence.Persistence;
 import javax.persistence.EntityManager;
@@ -50,6 +51,20 @@ public class Repository implements IRepository {
 	}
 
 	public void deliverOrder(Order order) {
+
+	}
+
+	public User login(String username, String password) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Query query = entityManager.createNamedQuery("getLoginUser");
+		query.setParameter("username",username);
+		query.setParameter("pass",password);
+		List<User> list= query.getResultList();
+		if(list.size()==1){
+			return list.get(0);
+		}else
+			return null;
 
 	}
 

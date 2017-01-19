@@ -7,6 +7,10 @@ import java.util.List;
  * Created by Sergiu on 19-Jan-17.
  */
 @Entity
+@NamedQueries({
+		@NamedQuery(query = "Select u from User u where u.username=:username and u.password=:pass", name = "getLoginUser")
+})
+@Table(name="users")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,7 @@ public class User {
 	@Column
 	private String password;
 	@Column
+	@Enumerated(EnumType.STRING)
 	private UserType userType;
 
 	@OneToMany(mappedBy = "owner")

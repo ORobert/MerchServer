@@ -3,6 +3,7 @@ package Server;
 import Models.Order;
 import Models.OrderState;
 import Models.Product;
+import Models.User;
 import Persistence.IRepository;
 import Protocol.*;
 
@@ -48,6 +49,15 @@ public class ClientThread extends Thread {
 			repository.deliverOrder(order);
 			return new OkResponse();
 		}
+		if (request instanceof LoginRequest){
+            User user = repository.login(((LoginRequest) request).getUsername(),((LoginRequest) request).getPassword());
+            if (user!=null){
+                LoginResponse response = new LoginResponse();
+                response.setUser(user);
+                return response;
+            }
+            return new ErrorResponse();
+        }
         return null;
     }
 
