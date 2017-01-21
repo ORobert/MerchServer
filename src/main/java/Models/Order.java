@@ -1,6 +1,7 @@
 package Models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 		@NamedQuery(query = "SELECT O FROM Order O",name = "GetAllOrders")
 })
 @Entity
-public class Order {
+public class Order implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -51,7 +51,11 @@ public class Repository implements IRepository {
 	}
 
 	public void deliverOrder(Order order) {
-
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		//Query query=entityManager.createQuery("UPDATE Order ")
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 
 	public User login(String username, String password) {

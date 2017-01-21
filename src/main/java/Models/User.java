@@ -1,6 +1,7 @@
 package Models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
 		@NamedQuery(query = "Select u from User u where u.username=:username and u.password=:pass", name = "getLoginUser")
 })
 @Table(name="users")
-public class User {
+public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

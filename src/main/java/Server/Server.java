@@ -24,8 +24,8 @@ public class Server {
 
     public void setRepository(IRepository repository){
         this.repository=repository;
-        User user =  repository.login("robert","robert");
-        System.out.println(user);
+//        User user =  repository.login("robert","robert");
+//        System.out.println(user);
         //((ShopRepository) this.repository).seed("products.xml");
     }
 
@@ -41,6 +41,7 @@ public class Server {
             System.out.println("Waiting for clients!");
             try {
                 client = server.accept();
+                System.out.println("Client connected: "+client);
                 (new ClientThread(client,repository)).run();
             } catch (IOException e) {
                 e.printStackTrace();
