@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface IRepository {
     List<Product> getAllProducts();
-    List<Order> getAllOrders();
+    List<Order> getAllConfirmedOrders();
     List<Product> getByName(String name);
     Product getById(int id);
     void orderProducts(Order order);

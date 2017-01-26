@@ -45,7 +45,7 @@ public class ClientThread extends Thread {
 		if(request instanceof DeliverOrderRequest){
         	DeliverOrderRequest req=((DeliverOrderRequest) request);
         	Order order=req.getOrder();
-        	order.setState(OrderState.Delivered);
+        	order.setState("Delivered");
 			repository.deliverOrder(order);
 			return new OkResponse();
 		}
@@ -58,6 +58,9 @@ public class ClientThread extends Thread {
             }
             return new ErrorResponse();
         }
+        if(request instanceof GetAllConfirmedOrdersRequest){
+		    return new GetAllConfirmedOrdersResponse(repository.getAllConfirmedOrders());
+        }
         return null;
     }
 
@@ -65,8 +68,8 @@ public class ClientThread extends Thread {
         ObjectInputStream recive = null;
         ObjectOutputStream send = null;
         try {
-            send = new ObjectOutputStream(client.getOutputStream());
             recive = new ObjectInputStream(client.getInputStream());
+            send = new ObjectOutputStream(client.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,10 +83,11 @@ public class ClientThread extends Thread {
                 send.flush();
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                break;
             }
         }
-
     }
 }

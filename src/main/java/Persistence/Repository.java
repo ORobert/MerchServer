@@ -1,6 +1,7 @@
 package Persistence;
 
 import Models.Order;
+import Models.OrderState;
 import Models.Product;
 import Models.User;
 
@@ -24,10 +25,11 @@ public class Repository implements IRepository {
         return resultList;
 	}
 
-	public List<Order> getAllOrders() {
+	public List<Order> getAllConfirmedOrders() {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		Query query = entityManager.createNamedQuery("GetAllOrders");
+		Query query = entityManager.createNamedQuery("GetAllConfirmedOrders");
+		query.setParameter("state", "Confirmed");
 		List<Order> resultList  = query.getResultList();
 		entityManager.close();
 		entityManagerFactory.close();
