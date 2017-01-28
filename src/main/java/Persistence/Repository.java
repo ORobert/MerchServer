@@ -5,10 +5,7 @@ import Models.OrderState;
 import Models.Product;
 import Models.User;
 
-import javax.persistence.Persistence;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -23,6 +20,35 @@ public class Repository implements IRepository {
         entityManager.close();
         entityManagerFactory.close();
         return resultList;
+	}
+
+	public List<Order> getOrdersByDriver(User driver) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Query query = entityManager.createNamedQuery("GetAllOrdersByDriver");
+		query.setParameter("state", "ToBeDelivered");
+		query.setParameter("drId", driver.getId());
+		List<Order> resultList  = query.getResultList();
+		entityManager.close();
+		entityManagerFactory.close();
+		return resultList;
+	}
+
+	public void updateLocation(List<Order> orders, double longitude, double latitude) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction trans=entityManager.getTransaction();
+		Query query=entityManager.createQuery("UPDATE Order O SET O.latitude=:lat,O.longitude=:long WHERE O.id=:id");
+		for (Order order:orders) {
+			query.setParameter("lat",latitude);
+			query.setParameter("long",longitude);
+			query.setParameter("id",order.getId());
+			trans.begin();
+			query.executeUpdate();
+			trans.commit();
+		}
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 
 	public List<Order> getAllConfirmedOrders() {
@@ -47,15 +73,31 @@ public class Repository implements IRepository {
 	public void takeOrders(List<Order> orders) {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		//Query query=entityManager.createQuery("UPDATE Order ")
+		EntityTransaction trans=entityManager.getTransaction();
+		Query query=entityManager.createQuery("UPDATE Order O SET O.driverId=:drId,O.state=:state WHERE O.id=:id");
+		for (Order order:orders) {
+			query.setParameter("drId",order.getDriverId());
+			query.setParameter("state",order.getState());
+			query.setParameter("id",order.getId());
+			trans.begin();
+			query.executeUpdate();
+			trans.commit();
+		}
 		entityManager.close();
 		entityManagerFactory.close();
 	}
 
 	public void deliverOrder(Order order) {
-		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		//Query query=entityManager.createQuery("UPDATE Order ")
+		EntityTransaction trans = entityManager.getTransaction();
+		Query query = entityManager.createQuery("UPDATE Order O SET O.driverId=:drId,O.state=:state WHERE O.id=:id");
+		query.setParameter("drId", order.getDriverId());
+		query.setParameter("state", "Delivered");
+		query.setParameter("id", order.getId());
+		trans.begin();
+		query.executeUpdate();
+		trans.commit();
 		entityManager.close();
 		entityManagerFactory.close();
 	}

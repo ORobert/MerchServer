@@ -18,4 +18,6 @@ public interface IRepository {
     void takeOrders(List<Order> orders);
     void deliverOrder(Order order);
     User login(String username, String password);
+    List<Order> getOrdersByDriver(User driver);
+    void updateLocation(List<Order> orders, double longitude, double latitude);
 }

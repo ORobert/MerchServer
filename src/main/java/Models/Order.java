@@ -11,7 +11,8 @@ import java.util.List;
  * Created by Sergiu on 19-Jan-17.
  */
 @NamedQueries({
-		@NamedQuery(query = "SELECT O FROM Order O WHERE state=:state",name = "GetAllConfirmedOrders")
+		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state",name = "GetAllConfirmedOrders"),
+		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state AND O.driverId=:drId",name = "GetAllOrdersByDriver")
 })
 @Entity
 @Table(name="orders")
@@ -19,9 +20,11 @@ public class Order implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column()
+	@Column
 	private String state;
 
+	@Column
+	private Integer driverId;
 	@Formula("(SELECT SUM(OP.Quantity) FROM ordersproducts OP WHERE OP.OrderId=id)")
 	private int prodCount;
 	@Formula("(SELECT U.Username FROM users U INNER JOIN orders O ON O.OwnerId=U.Id WHERE O.Id=id)")
@@ -51,6 +54,14 @@ public class Order implements Serializable{
 
 	public void setProdCount(int prodCount) {
 		this.prodCount = prodCount;
+	}
+
+	public int getDriverId() {
+		return driverId;
+	}
+
+	public void setDriverId(int driverId) {
+		this.driverId = driverId;
 	}
 
 	/*@ManyToMany(fetch = FetchType.EAGER)

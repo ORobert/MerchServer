@@ -1,7 +1,6 @@
 package Server;
 
 import Models.Order;
-import Models.OrderState;
 import Models.Product;
 import Models.User;
 import Persistence.IRepository;
@@ -27,7 +26,7 @@ public class ClientThread extends Thread {
     }
 
     public Object handleRequest(Request request){
-        System.out.println("Chacking request");
+        System.out.println("Checking request");
         if (request instanceof GetAllRequest){
             List<Product> products = repository.getAllProducts();
             Response response = new GetAllResponse();
@@ -42,6 +41,13 @@ public class ClientThread extends Thread {
 			repository.takeOrders(((TakeOrdersRequest) request).getOrders());
 			return new OkResponse();
 		}
+		if(request instanceof GetOrdersByDriverRequest){
+            return new GetOrdersResponse(repository.getOrdersByDriver(((GetOrdersByDriverRequest) request).getUser()));
+        }
+        if(request instanceof DeliverOrderRequest){
+		    repository.deliverOrder(((DeliverOrderRequest) request).getOrder());
+		    return new OkResponse();
+        }
 		if(request instanceof DeliverOrderRequest){
         	DeliverOrderRequest req=((DeliverOrderRequest) request);
         	Order order=req.getOrder();
@@ -58,17 +64,17 @@ public class ClientThread extends Thread {
             }
             return new ErrorResponse();
         }
-        if(request instanceof GetAllConfirmedOrdersRequest){
-		    return new GetAllConfirmedOrdersResponse(repository.getAllConfirmedOrders());
+        if(request instanceof GetConfirmedOrdersRequest){
+		    return new GetOrdersResponse(repository.getAllConfirmedOrders());
         }
         return null;
     }
 
     public void run(){
-        ObjectInputStream recive = null;
+        ObjectInputStream receive = null;
         ObjectOutputStream send = null;
         try {
-            recive = new ObjectInputStream(client.getInputStream());
+            receive = new ObjectInputStream(client.getInputStream());
             send = new ObjectOutputStream(client.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +82,7 @@ public class ClientThread extends Thread {
         while(true){
             try {
                 System.out.println("Reading request");
-                Object request = recive.readObject();
+                Object request = receive.readObject();
                 Object response = handleRequest((Request)request);
                 System.out.println("Sending response");
                 send.writeObject(response);

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Sergiu on 19-Jan-17.
  */
-public class TakeOrdersRequest {
+public class TakeOrdersRequest implements Request {
 	private List<Order> orders;
 
 	public TakeOrdersRequest(List<Order> orders) {
