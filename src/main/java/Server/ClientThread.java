@@ -25,6 +25,13 @@ public class ClientThread extends Thread {
         this.repository=repository;
     }
 
+    public void handleUpdateRequest(UpdateRequest request){
+		if(request instanceof UpdateLocationRequest){
+			UpdateLocationRequest req= (UpdateLocationRequest) request;
+			repository.updateLocation(req.getOrders(),req.getLongitude(),req.getLatitude());
+		}
+    }
+
     public Object handleRequest(Request request){
         System.out.println("Checking request");
         if (request instanceof GetAllRequest){
@@ -83,10 +90,14 @@ public class ClientThread extends Thread {
             try {
                 System.out.println("Reading request");
                 Object request = receive.readObject();
-                Object response = handleRequest((Request)request);
-                System.out.println("Sending response");
-                send.writeObject(response);
-                send.flush();
+                if(request instanceof UpdateRequest){
+                    handleUpdateRequest((UpdateRequest) request);
+                }else {
+                    Object response = handleRequest((Request)request);
+                    System.out.println("Sending response");
+                    send.writeObject(response);
+                    send.flush();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 break;

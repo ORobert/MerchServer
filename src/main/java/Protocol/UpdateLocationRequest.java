@@ -5,7 +5,7 @@ import Protocol.Request;
 
 import java.util.List;
 
-public class UpdateLocationRequest implements Request {
+public class UpdateLocationRequest implements UpdateRequest {
 	private List<Order> orders;
 	private double longitude, latitude;
 

@@ -39,6 +39,16 @@ public class Order implements Serializable{
 	private Double latitude;
 	@Column
 	private Double longitude;
+	@Column
+	private String address;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public String getUsername() {
 		return username;

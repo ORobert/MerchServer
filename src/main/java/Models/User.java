@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @NamedQueries({
-		@NamedQuery(query = "Select u from User u where u.username=:username and u.password=:pass", name = "getLoginUser")
+		@NamedQuery(query = "SELECT U FROM User U WHERE U.username=:username AND U.password=:pass", name = "getLoginUser")
 })
 @Table(name="users")
 public class User implements Serializable{
