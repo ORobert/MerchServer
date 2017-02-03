@@ -14,7 +14,7 @@ public interface IRepository {
     List<Order> getAllConfirmedOrders();
     List<Product> getByName(String name);
     Product getById(int id);
-    void orderProducts(Order order);
+    void orderProducts(Integer ownerId,List<Product> products);
     void takeOrders(List<Order> orders);
     void deliverOrder(Order order);
     User login(String username, String password);

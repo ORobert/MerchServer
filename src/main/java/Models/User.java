@@ -24,16 +24,16 @@ public class User implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private UserType userType;
 
-	//@OneToMany(mappedBy = "owner")
-	//private List<Order> orders;
-
-	//public List<Order> getOrders() {
-	//	return orders;
-	//}
-
-	//public void setOrders(List<Order> orders) {
-	//	this.orders = orders;
-	//}
+//	@OneToMany(mappedBy = "owner")
+//	private List<Order> orders;
+//
+//	public List<Order> getOrders() {
+//		return orders;
+//	}
+//
+//	public void setOrders(List<Order> orders) {
+//		this.orders = orders;
+//	}
 
 	public int getId() {
 		return id;

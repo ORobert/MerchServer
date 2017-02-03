@@ -2,6 +2,7 @@ package Models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by orobe on 27/12/2016.
@@ -25,7 +26,23 @@ public class Product implements Serializable {
 	@Column
 	private double price;
 
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "ordersproducts",
+//            joinColumns = {@JoinColumn(name = "ProductId",referencedColumnName = "id")},
+//            inverseJoinColumns = @JoinColumn(name = "OrderId",referencedColumnName = "id")
+//    )
+//	private List<Order> orders;
+
     public Product(){}
+
+
+//    public List<Order> getOrderList() {
+//        return orders;
+//    }
+//
+//    public void setOrderList(List<Order> orders) {
+//        this.orders = orders;
+//    }
 
     public Product(final String name){
         this.name=name;
@@ -64,6 +81,13 @@ public class Product implements Serializable {
     }
 
     public String toString(){
-        return "Name "+name;
+        String stock="";
+        if(this.quantity > 0){
+            stock="In Stock";
+        }
+        else {
+            stock="Stock 0";
+        }
+        return name + "------" + price + "   " + stock;
     }
 }

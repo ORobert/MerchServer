@@ -6,6 +6,7 @@ import Models.Product;
 import Models.User;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,12 +63,42 @@ public class Repository implements IRepository {
 		return resultList;
 	}
 
-	public void orderProducts(Order order) {
+	public void orderProducts(Integer ownerId,List<Product> products) {
+
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.persist(order);
+
+		Date date = new Date();
+		for (Product product : products){
+			Order order = new Order();
+			order.setOwnerId(ownerId);
+			order.setState("ToBeDelivered");
+			order.setAddress("Dorobanrilor Nr.51");
+			order.setDate(date);
+			entityManager.getTransaction().begin();
+			entityManager.persist(order);
+			entityManager.getTransaction().commit();
+			
+//			entityManager.flush();
+			entityManager.getTransaction().begin();
+			entityManager.createNativeQuery("INSERT into ordersproducts(OrderId,ProductId,Quantity) VALUES (?,?,?)").
+					setParameter(1,order.getId()).
+					setParameter(2,product.getId()).
+					setParameter(3,product.getQuantity()).
+					executeUpdate();
+			entityManager.getTransaction().commit();
+//			entityManager.flush();
+		}
 		entityManager.close();
 		entityManagerFactory.close();
+
+//		Order order = new Order();
+//		order.setOwnerId(ownerId);
+//		order.setState("ToBeDelivered");
+//		order.setAddress("Dorobanrilor Nr.51");
+//		order.setProducts(products);
+//		entityManager.persist(order);
+
 	}
 
 	public void takeOrders(List<Order> orders) {

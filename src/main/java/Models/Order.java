@@ -12,7 +12,8 @@ import java.util.List;
  */
 @NamedQueries({
 		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state",name = "GetAllConfirmedOrders"),
-		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state AND O.driverId=:drId",name = "GetAllOrdersByDriver")
+		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state AND O.driverId=:drId",name = "GetAllOrdersByDriver"),
+		@NamedQuery(query = "SELECT O.id FROM Order O WHERE O.ownerId=:ownerId",name = "GetAllByOwnerId")
 })
 @Entity
 @Table(name="orders")
@@ -20,27 +21,54 @@ public class Order implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	@Column
 	private String state;
 
 	@Column
-	private Integer driverId;
-	@Formula("(SELECT SUM(OP.Quantity) FROM ordersproducts OP WHERE OP.OrderId=id)")
-	private int prodCount;
+	private Integer ownerId;
+
 	@Formula("(SELECT U.Username FROM users U INNER JOIN orders O ON O.OwnerId=U.Id WHERE O.Id=id)")
 	private String username;
-	/*@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="OwnerId")
-	private User owner;*/
-	@Column
-	@Temporal(value = TemporalType.DATE)
-	private Date date;
+
 	@Column
 	private Double latitude;
 	@Column
 	private Double longitude;
+
+	@Column
+	@Temporal(value = TemporalType.DATE)
+	private Date date;
+
+	@Formula("(SELECT SUM(OP.Quantity) FROM ordersproducts OP WHERE OP.OrderId=id)")
+	private int prodCount;
+
+	@Column
+	private Integer driverId;
+
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name="OwnerId")
 	@Column
 	private String address;
+
+//	@ManyToMany(mappedBy = "orders")
+//	private List<Product> products;
+//
+//	public List<Product> getProducts() {
+//		return products;
+//	}
+//
+//	public void setProducts(List<Product> products) {
+//		this.products = products;
+//	}
+
+	public Integer getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Integer ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	public String getAddress() {
 		return address;
@@ -103,14 +131,6 @@ public class Order implements Serializable{
 		this.id = id;
 	}
 
-	/*public List<Product> getProducts() {
-		return products;
-	}*/
-
-	/*public void setProducts(List<Product> products) {
-		this.products = products;
-	}*/
-
 	public String getState() {
 		return state;
 	}
@@ -135,19 +155,4 @@ public class Order implements Serializable{
 		this.longitude = longitude;
 	}
 
-	/*public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public User getDriver() {
-		return driver;
-	}
-
-	public void setDriver(User driver) {
-		this.driver = driver;
-	}*/
 }

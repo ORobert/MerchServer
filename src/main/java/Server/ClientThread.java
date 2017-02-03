@@ -41,7 +41,7 @@ public class ClientThread extends Thread {
             return response;
         }
         if(request instanceof OrderProductsRequest){
-            repository.orderProducts(((OrderProductsRequest) request).getOrder());
+            repository.orderProducts(((OrderProductsRequest) request).getOwnerId(),((OrderProductsRequest) request).getProducts());
             return new OkResponse();
         }
         if(request instanceof TakeOrdersRequest){
