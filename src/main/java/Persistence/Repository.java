@@ -35,6 +35,16 @@ public class Repository implements IRepository {
 		return resultList;
 	}
 
+	public List<Product> getProductsByOrder(Order order) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction trans=entityManager.getTransaction();
+		Query query=entityManager.createNativeQuery("SELECT P.Id,P.Name,P.Price,OP.Quantity FROM products P INNER JOIN ordersproducts OP " +
+				"ON P.Id=OP.ProductId WHERE OP.OrderId=:id",Product.class);
+		query.setParameter("id",order.getId());
+		return query.getResultList();
+	}
+
 	public void updateLocation(List<Order> orders, double longitude, double latitude) {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();

@@ -21,7 +21,6 @@ public class Order implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	@Column
 	private String state;
 
@@ -50,17 +49,16 @@ public class Order implements Serializable{
 //	@JoinColumn(name="OwnerId")
 	@Column
 	private String address;
+	@Formula("(SELECT U.Username FROM users U INNER JOIN orders O ON O.DriverId=U.Id WHERE O.Id=id)")
+	private String driver;
 
-//	@ManyToMany(mappedBy = "orders")
-//	private List<Product> products;
-//
-//	public List<Product> getProducts() {
-//		return products;
-//	}
-//
-//	public void setProducts(List<Product> products) {
-//		this.products = products;
-//	}
+	public String getDriver() {
+		return driver;
+	}
+
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
 
 	public Integer getOwnerId() {
 		return ownerId;
@@ -102,15 +100,6 @@ public class Order implements Serializable{
 		this.driverId = driverId;
 	}
 
-	/*@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "ordersproducts",joinColumns = @JoinColumn(name="OrderId", referencedColumnName="Id"),
-			inverseJoinColumns=@JoinColumn(name="ProductId", referencedColumnName="Id"))
-	private List<Product> products;*/
-
-	/*@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="DriverId")
-	private User driver;*/
-
 	public Order(){
 		state="Confirmed";
 	}
@@ -139,20 +128,19 @@ public class Order implements Serializable{
 		this.state = state;
 	}
 
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(double latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(double longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-
 }

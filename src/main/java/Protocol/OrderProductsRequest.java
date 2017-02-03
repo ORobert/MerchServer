@@ -1,6 +1,5 @@
 package Protocol;
 
-import Models.Order;
 import Models.Product;
 
 import java.util.List;

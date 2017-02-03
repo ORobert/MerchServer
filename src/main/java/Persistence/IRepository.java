@@ -20,4 +20,5 @@ public interface IRepository {
     User login(String username, String password);
     List<Order> getOrdersByDriver(User driver);
     void updateLocation(List<Order> orders, double longitude, double latitude);
+    List<Product> getProductsByOrder(Order order);
 }

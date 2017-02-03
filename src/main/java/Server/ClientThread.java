@@ -48,6 +48,9 @@ public class ClientThread extends Thread {
 			repository.takeOrders(((TakeOrdersRequest) request).getOrders());
 			return new OkResponse();
 		}
+		if(request instanceof GetProductsByOrderRequest){
+        	return new GetAllResponse(repository.getProductsByOrder(((GetProductsByOrderRequest) request).getOrder()));
+		}
 		if(request instanceof GetOrdersByDriverRequest){
             return new GetOrdersResponse(repository.getOrdersByDriver(((GetOrdersByDriverRequest) request).getUser()));
         }
@@ -61,6 +64,9 @@ public class ClientThread extends Thread {
         	order.setState("Delivered");
 			repository.deliverOrder(order);
 			return new OkResponse();
+		}
+		if(request instanceof GetLocationRequest){
+			return new LocationResponse(45.1,23.1);
 		}
 		if (request instanceof LoginRequest){
             User user = repository.login(((LoginRequest) request).getUsername(),((LoginRequest) request).getPassword());
