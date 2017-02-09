@@ -66,7 +66,7 @@ public class ClientThread extends Thread {
 			return new OkResponse();
 		}
 		if(request instanceof GetLocationRequest){
-			return new LocationResponse(45.1,23.1);
+			return new LocationResponse(repository.getOrderLocation(((GetLocationRequest) request).getOrder()));
 		}
 		if (request instanceof LoginRequest){
             User user = repository.login(((LoginRequest) request).getUsername(),((LoginRequest) request).getPassword());

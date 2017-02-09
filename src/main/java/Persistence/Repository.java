@@ -6,6 +6,7 @@ import Models.Product;
 import Models.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,17 @@ public class Repository implements IRepository {
 				"ON P.Id=OP.ProductId WHERE OP.OrderId=:id",Product.class);
 		query.setParameter("id",order.getId());
 		return query.getResultList();
+	}
+
+	public Double[] getOrderLocation(Order order) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Query query=entityManager.createNativeQuery("SELECT O.latitude,O.longitude FROM orders O WHERE O.id=:id");
+		query.setParameter("id",order.getId());
+		Object[] aux= (Object[]) query.getResultList().get(0);
+		entityManager.close();
+		entityManagerFactory.close();
+		return new Double[]{((BigDecimal)aux[0]).doubleValue(),((BigDecimal)aux[1])	.doubleValue()};
 	}
 
 	public void updateLocation(List<Order> orders, double longitude, double latitude) {
