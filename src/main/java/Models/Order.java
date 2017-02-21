@@ -12,7 +12,8 @@ import java.util.List;
  */
 @NamedQueries({
 		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state",name = "GetAllConfirmedOrders"),
-		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state AND O.driverId=:drId",name = "GetAllOrdersByDriver"),
+		@NamedQuery(query = "SELECT O FROM Order O WHERE O.state=:state AND O.driverId=:drId",name = "GetOrdersByDriver"),
+		@NamedQuery(query = "SELECT O FROM Order O WHERE O.ownerId=:id",name = "GetOrdersByOwner"),
 		@NamedQuery(query = "SELECT O.id FROM Order O WHERE O.ownerId=:ownerId",name = "GetAllByOwnerId")
 })
 @Entity

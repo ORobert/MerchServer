@@ -10,11 +10,20 @@ import java.util.List;
 public class OrderProductsRequest implements Request {
 	private Integer ownerId;
 	private List<Product> products;
+	private String address;
 
-
-	public OrderProductsRequest(Integer ownerId, List<Product> products) {
+	public OrderProductsRequest(Integer ownerId, String address, List<Product> products) {
 		this.ownerId = ownerId;
 		this.products = products;
+		this.address=address;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public List<Product> getProducts() {

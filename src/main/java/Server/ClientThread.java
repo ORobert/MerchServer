@@ -41,7 +41,7 @@ public class ClientThread extends Thread {
             return response;
         }
         if(request instanceof OrderProductsRequest){
-            repository.orderProducts(((OrderProductsRequest) request).getOwnerId(),((OrderProductsRequest) request).getProducts());
+            repository.orderProducts(((OrderProductsRequest) request).getOwnerId(),((OrderProductsRequest) request).getAddress(),((OrderProductsRequest) request).getProducts());
             return new OkResponse();
         }
         if(request instanceof TakeOrdersRequest){
@@ -54,6 +54,9 @@ public class ClientThread extends Thread {
 		if(request instanceof GetOrdersByDriverRequest){
             return new GetOrdersResponse(repository.getOrdersByDriver(((GetOrdersByDriverRequest) request).getUser()));
         }
+		if(request instanceof GetOrdersByOwnerRequest){
+			return new GetOrdersResponse(repository.getOrdersByOwner(((GetOrdersByOwnerRequest) request).getUser()));
+		}
         if(request instanceof DeliverOrderRequest){
 		    repository.deliverOrder(((DeliverOrderRequest) request).getOrder());
 		    return new OkResponse();

@@ -27,7 +27,7 @@ public class Repository implements IRepository {
 	public List<Order> getOrdersByDriver(User driver) {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		Query query = entityManager.createNamedQuery("GetAllOrdersByDriver");
+		Query query = entityManager.createNamedQuery("GetOrdersByDriver");
 		query.setParameter("state", "ToBeDelivered");
 		query.setParameter("drId", driver.getId());
 		List<Order> resultList  = query.getResultList();
@@ -35,6 +35,18 @@ public class Repository implements IRepository {
 		entityManagerFactory.close();
 		return resultList;
 	}
+
+	public List<Order> getOrdersByOwner(User owner) {
+		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Query query = entityManager.createNamedQuery("GetOrdersByOwner");
+		query.setParameter("id", owner.getId());
+		List<Order> resultList  = query.getResultList();
+		entityManager.close();
+		entityManagerFactory.close();
+		return resultList;
+	}
+
 
 	public List<Product> getProductsByOrder(Order order) {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
@@ -52,9 +64,10 @@ public class Repository implements IRepository {
 		Query query=entityManager.createNativeQuery("SELECT O.latitude,O.longitude FROM orders O WHERE O.id=:id");
 		query.setParameter("id",order.getId());
 		Object[] aux= (Object[]) query.getResultList().get(0);
+		Double[] db = new Double[]{aux[0]!=null?((BigDecimal) aux[0]).doubleValue():null, aux[1]!=null?((BigDecimal) aux[1]).doubleValue():null};
 		entityManager.close();
 		entityManagerFactory.close();
-		return new Double[]{((BigDecimal)aux[0]).doubleValue(),((BigDecimal)aux[1])	.doubleValue()};
+		return db;
 	}
 
 	public void updateLocation(List<Order> orders, double longitude, double latitude) {
@@ -85,17 +98,15 @@ public class Repository implements IRepository {
 		return resultList;
 	}
 
-	public void orderProducts(Integer ownerId,List<Product> products) {
-
+	public void orderProducts(Integer ownerId,String address,List<Product> products) {
 		EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("merch");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-
 		Date date = new Date();
 		for (Product product : products){
 			Order order = new Order();
 			order.setOwnerId(ownerId);
-			order.setState("ToBeDelivered");
-			order.setAddress("Dorobanrilor Nr.51");
+			order.setState("Confirmed");
+			order.setAddress(address);
 			order.setDate(date);
 			entityManager.getTransaction().begin();
 			entityManager.persist(order);
@@ -113,14 +124,6 @@ public class Repository implements IRepository {
 		}
 		entityManager.close();
 		entityManagerFactory.close();
-
-//		Order order = new Order();
-//		order.setOwnerId(ownerId);
-//		order.setState("ToBeDelivered");
-//		order.setAddress("Dorobanrilor Nr.51");
-//		order.setProducts(products);
-//		entityManager.persist(order);
-
 	}
 
 	public void takeOrders(List<Order> orders) {
